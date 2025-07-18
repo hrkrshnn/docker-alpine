@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - |
+        if [ -n "$INSTALL_SCRIPT_URI" ]; then
+          echo "INSTALL_SCRIPT_URI is set to $INSTALL_SCRIPT_URI"
+          aws s3 cp $INSTALL_SCRIPT_URI /tmp/install_script.sh
+          chmod +x /tmp/install_script.sh
+          /tmp/install_script.sh
+        else
+          echo "INSTALL_SCRIPT_URI is not set, skipping custom install script."
+        fi
+  build:
+    commands:
+      - echo "Build phase"
+  post_build:
+    commands:
+      - echo "Post-build phase"
+
+artifacts:
+  files:
+    - '**/*'
